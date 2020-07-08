@@ -1,0 +1,31 @@
+from selenium import webdriver as wd
+from selenium.webdriver.common.keys import Keys
+from bs4 import BeautifulSoup
+import time 
+driver = wd.Chrome('C:/Users/hr2me/Desktop/Pythonworkplace/chromedriver.exe')
+
+driver.get('https://youtu.be/n02ScKszcl0/')
+
+time.sleep(1)
+
+body = driver.find_element_by_tag_name("body")
+
+num_of_pagedowns = 50
+
+while num_of_pagedowns:
+    body.send_keys(Keys.PAGE_DOWN)
+    time.sleep(0.3)
+    num_of_pagedowns -= 1
+    try:
+        driver.find_element_by_xpath("""//*[@id="feed-main-what_to_watch"]/button""").click()
+    except:
+        None
+
+html = driver.page_source
+soup = BeautifulSoup(html, 'lxml')
+titles = soup.find_all('h3')
+
+for title in titles:
+    print (title.get_text())
+
+driver.close()
